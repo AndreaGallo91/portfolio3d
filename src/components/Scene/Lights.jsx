@@ -4,82 +4,76 @@ import { useFrame } from '@react-three/fiber';
 export function Lights() {
   const movingLightRef = useRef();
 
-  // Subtle moving light for atmosphere
   useFrame((state) => {
     if (movingLightRef.current) {
-      movingLightRef.current.position.x = Math.sin(state.clock.elapsedTime * 0.3) * 5;
-      movingLightRef.current.position.z = Math.cos(state.clock.elapsedTime * 0.3) * 5;
+      movingLightRef.current.position.x = Math.sin(state.clock.elapsedTime * 0.2) * 15;
+      movingLightRef.current.position.z = Math.cos(state.clock.elapsedTime * 0.2) * 15;
     }
   });
 
   return (
     <>
       {/* Ambient light - very low for space feel */}
-      <ambientLight intensity={0.1} color="#1e1e3f" />
+      <ambientLight intensity={0.08} color="#ffffff" />
 
-      {/* Main directional light */}
+      {/* Main sun light - distant star */}
       <directionalLight
-        position={[5, 10, 5]}
-        intensity={0.3}
-        color="#e5e7eb"
+        position={[50, 30, 20]}
+        intensity={0.6}
+        color="#fffaf0"
         castShadow
-        shadow-mapSize={[1024, 1024]}
-        shadow-camera-far={30}
-        shadow-camera-left={-10}
-        shadow-camera-right={10}
-        shadow-camera-top={10}
-        shadow-camera-bottom={-10}
+        shadow-mapSize={[2048, 2048]}
+        shadow-camera-far={100}
+        shadow-camera-left={-30}
+        shadow-camera-right={30}
+        shadow-camera-top={30}
+        shadow-camera-bottom={-30}
       />
 
-      {/* Purple accent light from above */}
-      <pointLight
-        position={[0, 8, -5]}
-        intensity={0.8}
-        color="#6b21a8"
-        distance={20}
+      {/* Secondary fill light - from planet reflection */}
+      <directionalLight
+        position={[-30, 10, -20]}
+        intensity={0.1}
+        color="#FFD700"
       />
 
-      {/* Cyan accent light - front */}
+      {/* Gold accent light for atmosphere */}
       <pointLight
-        position={[0, 3, 5]}
+        position={[0, 15, 0]}
         intensity={0.3}
-        color="#06b6d4"
-        distance={15}
+        color="#FFD700"
+        distance={50}
       />
 
       {/* Moving atmospheric light */}
       <pointLight
         ref={movingLightRef}
-        position={[0, 5, 0]}
-        intensity={0.2}
-        color="#6b21a8"
-        distance={12}
+        position={[0, 8, 0]}
+        intensity={0.15}
+        color="#FFD700"
+        distance={25}
       />
 
-      {/* Spot light on center area */}
-      <spotLight
-        position={[0, 10, 0]}
-        angle={0.4}
-        penumbra={0.8}
-        intensity={0.5}
+      {/* Rim lights for dramatic effect */}
+      <pointLight
+        position={[-20, 5, -20]}
+        intensity={0.1}
         color="#ffffff"
-        castShadow
-        target-position={[0, 0, -3]}
-      />
-
-      {/* Rim lights for depth */}
-      <pointLight
-        position={[-10, 5, -10]}
-        intensity={0.15}
-        color="#ec4899"
-        distance={20}
+        distance={30}
       />
 
       <pointLight
-        position={[10, 5, -10]}
+        position={[20, 5, -20]}
+        intensity={0.1}
+        color="#FFD700"
+        distance={30}
+      />
+
+      {/* Hemisphere light for natural look */}
+      <hemisphereLight
+        color="#ffffff"
+        groundColor="#1a1a1a"
         intensity={0.15}
-        color="#10b981"
-        distance={20}
       />
     </>
   );

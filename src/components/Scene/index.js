@@ -1,4 +1,12 @@
 export { Experience } from './Experience';
-export { SpaceRoom } from './SpaceRoom';
-export { ProjectObject } from './ProjectObject';
 export { Lights } from './Lights';
+export { FirstPersonControls } from './FirstPersonControls';
+
+// Environment
+export * from './Environment';
+
+// Portals
+export * from './Portals';
+
+// Props
+export * from './Props';

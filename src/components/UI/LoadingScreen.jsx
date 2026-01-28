@@ -6,57 +6,93 @@ export function LoadingScreen() {
   if (!isLoading) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] bg-gray-950 flex flex-col items-center justify-center">
+    <div className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center">
       {/* Animated Logo */}
       <div className="relative mb-8">
         {/* Outer ring */}
         <div
-          className="w-24 h-24 rounded-full border-2 border-purple-700/30 animate-spin"
+          className="w-28 h-28 rounded-full border-2 border-yellow-500/40 animate-spin"
           style={{ animationDuration: '3s' }}
         >
-          <div className="absolute top-0 left-1/2 w-2 h-2 -ml-1 -mt-1 bg-purple-600 rounded-full" />
+          <div className="absolute top-0 left-1/2 w-3 h-3 -ml-1.5 -mt-1.5 bg-yellow-500 rounded-full" />
         </div>
 
         {/* Inner ring */}
         <div
-          className="absolute inset-2 rounded-full border-2 border-cyan-500/30 animate-spin"
+          className="absolute inset-3 rounded-full border-2 border-white/20 animate-spin"
           style={{ animationDuration: '2s', animationDirection: 'reverse' }}
         >
-          <div className="absolute bottom-0 left-1/2 w-2 h-2 -ml-1 mb-[-4px] bg-cyan-400 rounded-full" />
+          <div className="absolute bottom-0 left-1/2 w-2 h-2 -ml-1 mb-[-4px] bg-white rounded-full" />
         </div>
 
         {/* Center logo */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <span
-            className="text-2xl font-bold text-gray-100"
-            style={{ fontFamily: 'Orbitron, sans-serif' }}
-          >
-            51
-          </span>
+          <div className="text-center">
+            <span
+              className="text-yellow-500 text-lg"
+              style={{ fontFamily: 'monospace' }}
+            >
+              {'{'}
+            </span>
+            <span
+              className="text-2xl font-bold text-white mx-1"
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
+            >
+              51
+            </span>
+            <span
+              className="text-yellow-500 text-lg"
+              style={{ fontFamily: 'monospace' }}
+            >
+              {'}'}
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Loading text */}
-      <div className="text-center text-gray-100">
-        <h2
-          className="text-xl font-bold mb-2 tracking-widest"
-          style={{ fontFamily: 'Orbitron, sans-serif' }}
-        >
-          SPACE 51
-        </h2>
-        <p className="text-gray-400 text-sm tracking-wider">
-          Inizializzando spazio 3D...
+      <div className="text-center">
+        <div className="flex items-center justify-center mb-2">
+          <span
+            className="text-xl font-bold text-white tracking-widest"
+            style={{ fontFamily: 'Orbitron, sans-serif' }}
+          >
+            SPACE
+          </span>
+          <span className="text-xl font-bold text-yellow-500 mx-2" style={{ fontFamily: 'monospace' }}>
+            {'{ 51 }'}
+          </span>
+        </div>
+        <p className="text-gray-500 text-sm tracking-wider">
+          Atterraggio sulla luna in corso...
         </p>
       </div>
 
       {/* Loading bar */}
-      <div className="mt-8 w-48 h-1 bg-gray-800 rounded-full overflow-hidden">
+      <div className="mt-8 w-56 h-1 bg-gray-900 rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-purple-600 to-cyan-400"
+          className="h-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-white"
           style={{
             animation: 'loading-bar 1.5s ease-in-out infinite',
           }}
         />
+      </div>
+
+      {/* Stars decoration */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {Array.from({ length: 50 }).map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              opacity: Math.random() * 0.5 + 0.2,
+              animationDelay: `${Math.random() * 2}s`,
+              animationDuration: `${1 + Math.random() * 2}s`,
+            }}
+          />
+        ))}
       </div>
 
       <style>{`

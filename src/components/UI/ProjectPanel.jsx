@@ -7,11 +7,11 @@ export function ProjectPanel() {
 
   return (
     <div className="info-panel animate-slide-in">
-      <div className="glass rounded-2xl p-6 glow-purple relative">
+      <div className="bg-black/90 backdrop-blur-md rounded-2xl p-6 border border-yellow-500/30 shadow-lg shadow-yellow-500/10 relative">
         {/* Close button */}
         <button
           onClick={clearSelectedProject}
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700/50 hover:bg-purple-700/50 transition-colors text-gray-200"
+          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-800 hover:bg-yellow-500/30 transition-colors text-gray-300 hover:text-yellow-500"
           aria-label="Chiudi pannello"
         >
           <svg
@@ -31,18 +31,12 @@ export function ProjectPanel() {
         </button>
 
         {/* Project color indicator */}
-        <div
-          className="w-full h-1 rounded-full mb-4"
-          style={{ backgroundColor: selectedProject.color }}
-        />
+        <div className="w-full h-1 rounded-full mb-4 bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-400" />
 
         {/* Title */}
         <h2
-          className="text-2xl font-bold mb-3"
-          style={{
-            fontFamily: 'Orbitron, sans-serif',
-            color: selectedProject.color,
-          }}
+          className="text-2xl font-bold mb-3 text-yellow-500"
+          style={{ fontFamily: 'Orbitron, sans-serif' }}
         >
           {selectedProject.title}
         </h2>
@@ -54,14 +48,14 @@ export function ProjectPanel() {
 
         {/* Tech Stack */}
         <div className="mb-5">
-          <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">
+          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
             Tech Stack
           </h3>
           <div className="flex flex-wrap gap-2">
             {selectedProject.techStack.map((tech, index) => (
               <span
                 key={index}
-                className="px-3 py-1 text-sm rounded-full bg-gray-700/60 text-gray-200 border border-purple-700/30"
+                className="px-3 py-1 text-sm rounded-full bg-gray-800 text-gray-300 border border-yellow-500/20"
               >
                 {tech}
               </span>
@@ -76,7 +70,7 @@ export function ProjectPanel() {
               href={selectedProject.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-700 hover:bg-purple-700/40 transition-colors border border-purple-700/40 text-gray-200"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-700 text-gray-300 hover:text-white"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -96,11 +90,7 @@ export function ProjectPanel() {
               href={selectedProject.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors border text-gray-200"
-              style={{
-                backgroundColor: selectedProject.color + '20',
-                borderColor: selectedProject.color + '60',
-              }}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-yellow-500/20 hover:bg-yellow-500/30 transition-colors border border-yellow-500/50 text-yellow-500"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
