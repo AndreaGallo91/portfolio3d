@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Float, Text } from '@react-three/drei';
+import { Float, Html } from '@react-three/drei';
 import { useStore } from '../../store/useStore';
 import * as THREE from 'three';
 
@@ -17,11 +17,11 @@ export function ProjectObject({ project }) {
   useFrame((state) => {
     if (meshRef.current) {
       // Rotation
-      meshRef.current.rotation.y += 0.005;
+      meshRef.current.rotation.y += 0.008;
       meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
 
       // Scale on hover
-      const targetScale = hovered || isSelected ? 1.2 : 1;
+      const targetScale = hovered || isSelected ? 1.3 : 1;
       meshRef.current.scale.lerp(
         new THREE.Vector3(targetScale, targetScale, targetScale),
         0.1
@@ -30,7 +30,7 @@ export function ProjectObject({ project }) {
 
     // Glow intensity
     if (glowRef.current) {
-      const intensity = hovered || isSelected ? 2 : 0.5;
+      const intensity = hovered || isSelected ? 3 : 1;
       glowRef.current.intensity = THREE.MathUtils.lerp(
         glowRef.current.intensity,
         intensity,
@@ -62,11 +62,9 @@ export function ProjectObject({ project }) {
     const materialProps = {
       color: project.color,
       emissive: project.emissiveColor,
-      emissiveIntensity: hovered || isSelected ? 0.8 : 0.3,
+      emissiveIntensity: hovered || isSelected ? 1 : 0.4,
       roughness: 0.2,
       metalness: 0.8,
-      transparent: true,
-      opacity: 0.9,
     };
 
     switch (project.shape) {
@@ -87,7 +85,7 @@ export function ProjectObject({ project }) {
       case 'torusKnot':
         return (
           <mesh ref={meshRef} castShadow>
-            <torusKnotGeometry args={[0.5, 0.15, 100, 16]} />
+            <torusKnotGeometry args={[0.5, 0.18, 100, 16]} />
             <meshStandardMaterial {...materialProps} />
           </mesh>
         );
@@ -111,8 +109,8 @@ export function ProjectObject({ project }) {
   return (
     <Float
       speed={2}
-      rotationIntensity={0.2}
-      floatIntensity={0.5}
+      rotationIntensity={0.3}
+      floatIntensity={0.6}
       position={project.position}
     >
       <group
@@ -124,35 +122,48 @@ export function ProjectObject({ project }) {
         <pointLight
           ref={glowRef}
           color={project.color}
-          intensity={0.5}
-          distance={5}
+          intensity={1}
+          distance={6}
         />
 
         {/* The shape */}
         {renderShape()}
 
-        {/* Label below object */}
-        <Text
-          position={[0, -1.3, 0]}
-          fontSize={0.2}
-          color={hovered || isSelected ? project.color : '#e5e7eb'}
-          anchorX="center"
-          anchorY="middle"
-          font="/fonts/Inter-Bold.woff"
-          outlineWidth={0.02}
-          outlineColor="#0a0a0f"
+        {/* Label below object using Html */}
+        <Html
+          position={[0, -1.5, 0]}
+          center
+          distanceFactor={8}
+          style={{
+            transition: 'all 0.2s',
+            opacity: hovered || isSelected ? 1 : 0.7,
+            transform: `scale(${hovered || isSelected ? 1.1 : 1})`,
+          }}
         >
-          {project.title}
-        </Text>
+          <div
+            style={{
+              color: hovered || isSelected ? project.color : '#e5e7eb',
+              fontSize: '14px',
+              fontFamily: 'Orbitron, sans-serif',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              whiteSpace: 'nowrap',
+              textShadow: '0 0 10px rgba(0,0,0,0.8)',
+              pointerEvents: 'none',
+            }}
+          >
+            {project.title}
+          </div>
+        </Html>
 
         {/* Hover indicator ring */}
         {(hovered || isSelected) && (
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.8, 0]}>
-            <ringGeometry args={[0.9, 1.1, 32]} />
+            <ringGeometry args={[1, 1.2, 32]} />
             <meshBasicMaterial
               color={project.color}
               transparent
-              opacity={0.5}
+              opacity={0.6}
               side={THREE.DoubleSide}
             />
           </mesh>

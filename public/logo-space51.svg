@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+  <text x="10" y="70" font-family="Orbitron, sans-serif" font-size="60" font-weight="bold" fill="white">SPACE</text>
+  <text x="145" y="70" font-family="Orbitron, sans-serif" font-size="60" font-weight="bold" fill="white">51</text>
+  <text x="120" y="75" font-family="monospace" font-size="50" fill="#FFD700">{</text>
+  <text x="165" y="75" font-family="monospace" font-size="50" fill="#FFD700">}</text>
+</svg>

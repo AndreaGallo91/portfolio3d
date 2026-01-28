@@ -1,14 +1,6 @@
-import { Suspense, useEffect, useRef } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import {
-  OrbitControls,
-  PerspectiveCamera,
-  Environment,
-  PerformanceMonitor,
-  AdaptiveDpr,
-  AdaptiveEvents,
-} from '@react-three/drei';
-import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
+import { OrbitControls, PerspectiveCamera, Stars } from '@react-three/drei';
 import { useStore } from '../../store/useStore';
 import { projects } from '../../data/projects';
 import SpaceRoom from './SpaceRoom';
@@ -16,49 +8,47 @@ import ProjectObject from './ProjectObject';
 import Lights from './Lights';
 
 function Scene() {
-  const { setIsLoading, selectedProject, clearSelectedProject, isMobile } = useStore();
+  const { setIsLoading } = useStore();
 
   useEffect(() => {
-    // Simula il caricamento
-    const timer = setTimeout(() => setIsLoading(false), 1500);
+    // Scene loaded
+    const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, [setIsLoading]);
-
-  // Click on empty space to deselect
-  const handleCanvasClick = (e) => {
-    // Only clear if clicking on the floor/background
-    if (e.object.type === 'Mesh' && !e.object.userData.isProject) {
-      clearSelectedProject();
-    }
-  };
 
   return (
     <>
       {/* Camera */}
-      <PerspectiveCamera makeDefault position={[0, 2, 8]} fov={60} />
+      <PerspectiveCamera makeDefault position={[0, 3, 10]} fov={60} />
 
       {/* Controls */}
       <OrbitControls
         enablePan={true}
         enableZoom={true}
         enableRotate={true}
-        minDistance={3}
-        maxDistance={15}
+        minDistance={4}
+        maxDistance={20}
         maxPolarAngle={Math.PI / 2 - 0.1}
-        minPolarAngle={0.2}
+        minPolarAngle={0.3}
         target={[0, 1, 0]}
-        // Touch settings for mobile
-        touches={{
-          ONE: 1, // TOUCH.ROTATE
-          TWO: 2, // TOUCH.DOLLY_PAN
-        }}
       />
 
       {/* Lights */}
       <Lights />
 
-      {/* Environment */}
-      <fog attach="fog" args={['#0a0a0f', 10, 30]} />
+      {/* Fog for atmosphere */}
+      <fog attach="fog" args={['#0a0a0f', 15, 40]} />
+
+      {/* Background stars */}
+      <Stars
+        radius={50}
+        depth={50}
+        count={1500}
+        factor={4}
+        saturation={0}
+        fade
+        speed={0.5}
+      />
 
       {/* Room */}
       <SpaceRoom />
@@ -67,25 +57,12 @@ function Scene() {
       {projects.map((project) => (
         <ProjectObject key={project.id} project={project} />
       ))}
-
-      {/* Post-processing effects */}
-      {!isMobile && (
-        <EffectComposer multisampling={0}>
-          <Bloom
-            luminanceThreshold={0.2}
-            luminanceSmoothing={0.9}
-            intensity={0.8}
-            mipmapBlur
-          />
-          <Vignette eskil={false} offset={0.1} darkness={0.8} />
-        </EffectComposer>
-      )}
     </>
   );
 }
 
 export function Experience() {
-  const { isMobile, setIsMobile } = useStore();
+  const { setIsMobile } = useStore();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -97,12 +74,12 @@ export function Experience() {
   }, [setIsMobile]);
 
   return (
-    <div className="canvas-container w-full h-full">
+    <div className="canvas-container">
       <Canvas
         shadows
-        dpr={[1, isMobile ? 1.5 : 2]}
+        dpr={[1, 2]}
         gl={{
-          antialias: !isMobile,
+          antialias: true,
           alpha: false,
           powerPreference: 'high-performance',
         }}
@@ -110,17 +87,9 @@ export function Experience() {
           gl.setClearColor('#0a0a0f');
         }}
       >
-        <PerformanceMonitor
-          onDecline={() => {
-            // Reduce quality if performance drops
-          }}
-        >
-          <AdaptiveDpr pixelated />
-          <AdaptiveEvents />
-          <Suspense fallback={null}>
-            <Scene />
-          </Suspense>
-        </PerformanceMonitor>
+        <Suspense fallback={null}>
+          <Scene />
+        </Suspense>
       </Canvas>
     </div>
   );
