@@ -8,11 +8,13 @@ export function WarpEffect() {
   useEffect(() => {
     if (isEnteringPortal) {
       setPhase(1);
-      const timer1 = setTimeout(() => setPhase(2), 500);
-      const timer2 = setTimeout(() => setPhase(3), 1000);
+      const timer1 = setTimeout(() => setPhase(2), 400);
+      const timer2 = setTimeout(() => setPhase(3), 900);
+      const timer3 = setTimeout(() => setPhase(4), 1200);
       return () => {
         clearTimeout(timer1);
         clearTimeout(timer2);
+        clearTimeout(timer3);
       };
     } else {
       setPhase(0);
@@ -23,36 +25,71 @@ export function WarpEffect() {
 
   return (
     <div className="fixed inset-0 z-[100] pointer-events-none overflow-hidden">
-      {/* Radial warp lines */}
+      {/* Dark vignette that closes in */}
       <div
-        className={`absolute inset-0 transition-all duration-500 ${
+        className={`absolute inset-0 transition-all duration-700 ${
           phase >= 1 ? 'opacity-100' : 'opacity-0'
         }`}
         style={{
-          background: `radial-gradient(circle at center, transparent 0%, transparent 20%, rgba(255, 215, 0, 0.1) 40%, rgba(255, 215, 0, 0.3) 60%, rgba(255, 215, 0, 0.5) 80%, rgba(255, 215, 0, 0.8) 100%)`,
+          background: `radial-gradient(circle at center,
+            transparent 0%,
+            transparent ${phase >= 2 ? '5%' : '30%'},
+            rgba(0, 0, 0, 0.3) ${phase >= 2 ? '15%' : '45%'},
+            rgba(0, 0, 0, 0.7) ${phase >= 2 ? '30%' : '60%'},
+            rgba(0, 0, 0, 0.95) 100%)`,
+          transition: 'all 0.5s ease-in',
         }}
       />
 
-      {/* Speed lines animation */}
-      <div className={`absolute inset-0 ${phase >= 1 ? 'animate-warp-lines' : ''}`}>
-        {Array.from({ length: 40 }).map((_, i) => {
-          const angle = (i / 40) * 360;
-          const delay = Math.random() * 0.3;
+      {/* Warp tunnel rings */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        {Array.from({ length: 8 }).map((_, i) => {
+          const size = 100 + i * 80;
+          const delay = i * 0.08;
           return (
             <div
               key={i}
-              className="absolute left-1/2 top-1/2 origin-center"
+              className={`absolute rounded-full border-2 transition-all ${
+                phase >= 1 ? 'opacity-100' : 'opacity-0'
+              }`}
               style={{
-                transform: `rotate(${angle}deg)`,
-                animation: phase >= 1 ? `warp-line 0.8s ease-in ${delay}s forwards` : 'none',
+                width: `${size}px`,
+                height: `${size}px`,
+                borderColor: i % 2 === 0 ? 'rgba(255, 215, 0, 0.6)' : 'rgba(255, 255, 255, 0.3)',
+                animation: phase >= 1 ? `tunnel-ring 1s ease-in ${delay}s forwards` : 'none',
+                boxShadow: i % 2 === 0 ? '0 0 20px rgba(255, 215, 0, 0.4)' : 'none',
+              }}
+            />
+          );
+        })}
+      </div>
+
+      {/* Streaking stars/light beams */}
+      <div className="absolute inset-0">
+        {Array.from({ length: 60 }).map((_, i) => {
+          const angle = (i / 60) * 360;
+          const distance = 20 + Math.random() * 30;
+          const length = 50 + Math.random() * 150;
+          const delay = Math.random() * 0.3;
+          const thickness = 1 + Math.random() * 2;
+          return (
+            <div
+              key={i}
+              className={`absolute left-1/2 top-1/2 origin-left ${
+                phase >= 1 ? '' : 'hidden'
+              }`}
+              style={{
+                transform: `rotate(${angle}deg) translateX(${distance}px)`,
               }}
             >
               <div
-                className="w-1 bg-gradient-to-b from-transparent via-yellow-500 to-white"
+                className="bg-gradient-to-r from-yellow-400 via-white to-transparent"
                 style={{
-                  height: '0px',
-                  marginTop: '-50vh',
-                  animation: phase >= 1 ? `line-extend 0.6s ease-out ${delay}s forwards` : 'none',
+                  width: '0px',
+                  height: `${thickness}px`,
+                  animation: phase >= 1 ? `streak-extend 0.6s ease-out ${delay}s forwards` : 'none',
+                  boxShadow: '0 0 8px rgba(255, 215, 0, 0.8)',
+                  '--streak-length': `${length}px`,
                 }}
               />
             </div>
@@ -60,86 +97,113 @@ export function WarpEffect() {
         })}
       </div>
 
-      {/* Central vortex */}
+      {/* Central wormhole */}
       <div
-        className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-700 ${
+        className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ${
           phase >= 1 ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
         }`}
       >
-        {/* Outer ring */}
+        {/* Outer glow ring */}
         <div
-          className={`w-64 h-64 rounded-full border-4 border-yellow-500 ${
-            phase >= 1 ? 'animate-spin-fast' : ''
-          }`}
+          className="w-32 h-32 rounded-full"
           style={{
-            boxShadow: '0 0 60px rgba(255, 215, 0, 0.8), inset 0 0 40px rgba(255, 215, 0, 0.4)',
+            background: 'radial-gradient(circle, transparent 40%, rgba(255, 215, 0, 0.4) 60%, rgba(255, 215, 0, 0.8) 70%, transparent 100%)',
+            animation: phase >= 1 ? 'portal-pulse 0.3s ease-in-out infinite' : 'none',
           }}
         />
 
-        {/* Middle ring */}
+        {/* Inner dark void */}
         <div
-          className={`absolute inset-8 rounded-full border-2 border-white ${
-            phase >= 1 ? 'animate-spin-reverse' : ''
+          className={`absolute inset-4 rounded-full transition-all duration-500 ${
+            phase >= 2 ? 'scale-150' : 'scale-100'
           }`}
           style={{
-            boxShadow: '0 0 30px rgba(255, 255, 255, 0.6)',
+            background: 'radial-gradient(circle, #000 0%, #000 60%, rgba(255, 215, 0, 0.3) 80%, transparent 100%)',
+            boxShadow: 'inset 0 0 30px rgba(255, 215, 0, 0.5), 0 0 40px rgba(0, 0, 0, 0.8)',
           }}
         />
 
-        {/* Inner core */}
+        {/* Spinning edge particles */}
         <div
-          className={`absolute inset-16 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 ${
-            phase >= 2 ? 'animate-pulse-fast' : ''
-          }`}
+          className="absolute inset-0"
           style={{
-            boxShadow: '0 0 50px rgba(255, 215, 0, 1)',
+            animation: phase >= 1 ? 'spin-slow 1s linear infinite' : 'none',
           }}
-        />
+        >
+          {Array.from({ length: 12 }).map((_, i) => {
+            const angle = (i / 12) * 360;
+            return (
+              <div
+                key={i}
+                className="absolute w-2 h-2 bg-yellow-400 rounded-full"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  transform: `rotate(${angle}deg) translateX(60px) translateY(-50%)`,
+                  boxShadow: '0 0 10px rgba(255, 215, 0, 1)',
+                  opacity: 0.8,
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
 
-      {/* Suction particles */}
+      {/* Particles being sucked in */}
       <div className={`absolute inset-0 ${phase >= 1 ? '' : 'hidden'}`}>
-        {Array.from({ length: 30 }).map((_, i) => {
-          const startX = Math.random() * 100;
-          const startY = Math.random() * 100;
-          const delay = Math.random() * 0.5;
+        {Array.from({ length: 40 }).map((_, i) => {
+          const startAngle = Math.random() * 360;
+          const startDistance = 100 + Math.random() * 400;
+          const delay = Math.random() * 0.6;
+          const size = 2 + Math.random() * 4;
           return (
             <div
               key={`particle-${i}`}
-              className="absolute w-2 h-2 bg-yellow-500 rounded-full"
+              className="absolute left-1/2 top-1/2 rounded-full"
               style={{
-                left: `${startX}%`,
-                top: `${startY}%`,
-                animation: `suction-particle 0.8s ease-in ${delay}s forwards`,
-                boxShadow: '0 0 10px rgba(255, 215, 0, 0.8)',
+                width: `${size}px`,
+                height: `${size}px`,
+                background: i % 3 === 0 ? '#FFD700' : i % 3 === 1 ? '#ffffff' : '#ffaa00',
+                transform: `rotate(${startAngle}deg) translateX(${startDistance}px)`,
+                animation: `spiral-in 0.8s ease-in ${delay}s forwards`,
+                boxShadow: '0 0 6px currentColor',
               }}
             />
           );
         })}
       </div>
 
-      {/* Flash effect on entering */}
+      {/* Final flash to white then black */}
       <div
-        className={`absolute inset-0 bg-white transition-opacity duration-300 ${
+        className={`absolute inset-0 bg-white transition-opacity duration-200 ${
           phase >= 3 ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
+      <div
+        className={`absolute inset-0 bg-black transition-opacity duration-300 ${
+          phase >= 4 ? 'opacity-100' : 'opacity-0'
         }`}
       />
 
       {/* Text */}
       {nearPortal && (
         <div
-          className={`absolute left-1/2 top-1/4 -translate-x-1/2 text-center transition-all duration-500 ${
-            phase >= 1 && phase < 3 ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
+          className={`absolute left-1/2 bottom-1/4 -translate-x-1/2 text-center transition-all duration-500 ${
+            phase >= 1 && phase < 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
         >
           <div
-            className="text-yellow-500 text-3xl font-bold tracking-widest"
-            style={{ fontFamily: 'Orbitron, sans-serif', textShadow: '0 0 20px rgba(255, 215, 0, 0.8)' }}
+            className="text-yellow-500 text-2xl font-bold tracking-[0.3em] mb-2"
+            style={{
+              fontFamily: 'Orbitron, sans-serif',
+              textShadow: '0 0 30px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 215, 0, 0.5)',
+              animation: phase >= 1 ? 'text-glitch 0.1s infinite' : 'none',
+            }}
           >
-            ENTERING
+            WARPING
           </div>
           <div
-            className="text-white text-xl mt-2 tracking-wider"
+            className="text-white/80 text-sm tracking-widest"
             style={{ fontFamily: 'Orbitron, sans-serif' }}
           >
             {nearPortal.title}
@@ -148,48 +212,47 @@ export function WarpEffect() {
       )}
 
       <style>{`
-        @keyframes warp-line {
-          0% { opacity: 0; }
-          50% { opacity: 1; }
-          100% { opacity: 0; }
-        }
-
-        @keyframes line-extend {
-          0% { height: 0px; }
-          100% { height: 50vh; }
-        }
-
-        @keyframes suction-particle {
+        @keyframes tunnel-ring {
           0% {
-            transform: translate(0, 0) scale(1);
-            opacity: 1;
+            transform: scale(1) translateZ(0);
+            opacity: 0.8;
           }
           100% {
-            transform: translate(calc(50vw - 100%), calc(50vh - 100%)) scale(0);
+            transform: scale(0) translateZ(100px);
             opacity: 0;
           }
         }
 
-        .animate-spin-fast {
-          animation: spin 0.5s linear infinite;
+        @keyframes streak-extend {
+          0% { width: 0px; opacity: 0; }
+          20% { opacity: 1; }
+          100% { width: var(--streak-length); opacity: 0; }
         }
 
-        .animate-spin-reverse {
-          animation: spin 0.7s linear infinite reverse;
+        @keyframes portal-pulse {
+          0%, 100% { transform: scale(1); opacity: 0.8; }
+          50% { transform: scale(1.1); opacity: 1; }
         }
 
-        .animate-pulse-fast {
-          animation: pulse 0.2s ease-in-out infinite;
-        }
-
-        @keyframes spin {
+        @keyframes spin-slow {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
 
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.1); opacity: 0.8; }
+        @keyframes spiral-in {
+          0% {
+            opacity: 1;
+          }
+          100% {
+            transform: rotate(calc(var(--start-angle, 0deg) + 720deg)) translateX(0px) scale(0);
+            opacity: 0;
+          }
+        }
+
+        @keyframes text-glitch {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-2px); }
+          75% { transform: translateX(2px); }
         }
       `}</style>
     </div>
