@@ -79,18 +79,18 @@ function GroundRocks() {
   );
 }
 
-// Floating rocks in the air
+// Floating rocks in the air - reduced count
 function FloatingRocks() {
   const floatingRocks = useMemo(() => {
     const items = [];
-    // 25 floating rocks at various heights
-    for (let i = 0; i < 25; i++) {
+    // Only 8 floating rocks (70% reduction from 25)
+    for (let i = 0; i < 8; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const radius = 5 + Math.random() * 35;
+      const radius = 8 + Math.random() * 30;
       items.push({
         position: [
           Math.cos(angle) * radius,
-          2 + Math.random() * 8, // Float between 2-10 units high
+          3 + Math.random() * 6, // Float between 3-9 units high
           Math.sin(angle) * radius,
         ],
         rotation: [
@@ -98,9 +98,9 @@ function FloatingRocks() {
           Math.random() * Math.PI,
           Math.random() * Math.PI,
         ],
-        scale: 0.3 + Math.random() * 1.2,
-        floatSpeed: 0.5 + Math.random() * 1.5,
-        floatIntensity: 0.3 + Math.random() * 0.5,
+        scale: 0.4 + Math.random() * 0.8,
+        floatSpeed: 0.3 + Math.random() * 0.7,
+        floatIntensity: 0.2 + Math.random() * 0.3,
       });
     }
     return items;

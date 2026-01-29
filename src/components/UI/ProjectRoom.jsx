@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useStore } from '../../store/useStore';
+import { projects } from '../../data/projects';
 
 export function ProjectRoom() {
-  const { inProjectRoom, currentProjectRoom, exitProjectRoom } = useStore();
+  const { inProjectRoom, currentProjectRoom, exitProjectRoom, enterProjectRoom } = useStore();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+
+  // Get other projects for navigation
+  const otherProjects = projects.filter(p => p.id !== currentProjectRoom?.id);
 
   // Fade in effect
   useEffect(() => {
@@ -30,6 +34,12 @@ export function ProjectRoom() {
     return () => clearInterval(interval);
   }, [inProjectRoom, currentProjectRoom]);
 
+  // Navigate to another project
+  const goToProject = (project) => {
+    setCurrentSlide(0);
+    enterProjectRoom(project);
+  };
+
   if (!inProjectRoom || !currentProjectRoom) return null;
 
   const hasScreenshots = currentProjectRoom.screenshots?.length > 0;
@@ -39,9 +49,10 @@ export function ProjectRoom() {
       className={`fixed inset-0 z-[150] bg-black transition-opacity duration-500 ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
+      style={{ cursor: 'default' }}
     >
       {/* Animated stars background */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {Array.from({ length: 80 }).map((_, i) => (
           <div
             key={i}
@@ -82,8 +93,11 @@ export function ProjectRoom() {
                   {currentProjectRoom.screenshots.map((_, idx) => (
                     <button
                       key={idx}
-                      onClick={() => setCurrentSlide(idx)}
-                      className={`w-2 h-2 rounded-full transition-all ${
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentSlide(idx);
+                      }}
+                      className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
                         idx === currentSlide
                           ? 'bg-yellow-500 w-6'
                           : 'bg-white/30 hover:bg-white/50'
@@ -96,14 +110,15 @@ export function ProjectRoom() {
                 {currentProjectRoom.screenshots.length > 1 && (
                   <>
                     <button
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setCurrentSlide(
                           (prev) =>
                             (prev - 1 + currentProjectRoom.screenshots.length) %
                             currentProjectRoom.screenshots.length
-                        )
-                      }
-                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-yellow-500/30 flex items-center justify-center transition-colors border border-yellow-500/30"
+                        );
+                      }}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-yellow-500/30 flex items-center justify-center transition-colors border border-yellow-500/30 cursor-pointer"
                     >
                       <svg
                         className="w-6 h-6 text-yellow-500"
@@ -120,13 +135,14 @@ export function ProjectRoom() {
                       </svg>
                     </button>
                     <button
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setCurrentSlide(
                           (prev) =>
                             (prev + 1) % currentProjectRoom.screenshots.length
-                        )
-                      }
-                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-yellow-500/30 flex items-center justify-center transition-colors border border-yellow-500/30"
+                        );
+                      }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-yellow-500/30 flex items-center justify-center transition-colors border border-yellow-500/30 cursor-pointer"
                     >
                       <svg
                         className="w-6 h-6 text-yellow-500"
@@ -174,7 +190,7 @@ export function ProjectRoom() {
           <div className="mb-6">
             <button
               onClick={exitProjectRoom}
-              className="flex items-center gap-2 text-gray-400 hover:text-yellow-500 transition-colors mb-4"
+              className="flex items-center gap-2 text-gray-400 hover:text-yellow-500 transition-colors mb-4 cursor-pointer"
             >
               <svg
                 className="w-5 h-5"
@@ -241,7 +257,7 @@ export function ProjectRoom() {
                 href={currentProjectRoom.demo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 transition-all text-black font-bold text-lg"
+                className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 transition-all text-black font-bold text-lg cursor-pointer"
                 style={{ fontFamily: 'Orbitron, sans-serif' }}
               >
                 <svg
@@ -272,7 +288,7 @@ export function ProjectRoom() {
                 href={currentProjectRoom.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-700 text-gray-300 hover:text-white font-semibold"
+                className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 transition-colors border border-gray-700 text-gray-300 hover:text-white font-semibold cursor-pointer"
               >
                 <svg
                   className="w-6 h-6"
@@ -285,35 +301,50 @@ export function ProjectRoom() {
               </a>
             )}
 
-            <button
-              onClick={exitProjectRoom}
-              className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-transparent hover:bg-yellow-500/10 transition-colors border border-yellow-500/30 text-yellow-500 font-semibold mt-2"
-              style={{ fontFamily: 'Orbitron, sans-serif' }}
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"
-                />
-              </svg>
-              TORNA SULLA LUNA
-            </button>
+            {/* Navigate to other projects */}
+            {otherProjects.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-gray-800">
+                <h4
+                  className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3"
+                  style={{ fontFamily: 'Orbitron, sans-serif' }}
+                >
+                  Altri Progetti
+                </h4>
+                <div className="flex flex-col gap-2">
+                  {otherProjects.map((project) => (
+                    <button
+                      key={project.id}
+                      onClick={() => goToProject(project)}
+                      className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gray-900/50 hover:bg-yellow-500/10 transition-colors border border-gray-800 hover:border-yellow-500/30 text-gray-400 hover:text-yellow-500 text-left cursor-pointer"
+                    >
+                      <svg
+                        className="w-4 h-4 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 7l5 5m0 0l-5 5m5-5H6"
+                        />
+                      </svg>
+                      <span className="text-sm font-medium">{project.title}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Decorative corner elements */}
-      <div className="absolute top-4 left-4 w-12 h-12 border-l-2 border-t-2 border-yellow-500/50" />
-      <div className="absolute top-4 right-4 w-12 h-12 border-r-2 border-t-2 border-yellow-500/50" />
-      <div className="absolute bottom-4 left-4 w-12 h-12 border-l-2 border-b-2 border-yellow-500/50" />
-      <div className="absolute bottom-4 right-4 w-12 h-12 border-r-2 border-b-2 border-yellow-500/50" />
+      <div className="absolute top-4 left-4 w-12 h-12 border-l-2 border-t-2 border-yellow-500/50 pointer-events-none" />
+      <div className="absolute top-4 right-4 w-12 h-12 border-r-2 border-t-2 border-yellow-500/50 pointer-events-none" />
+      <div className="absolute bottom-4 left-4 w-12 h-12 border-l-2 border-b-2 border-yellow-500/50 pointer-events-none" />
+      <div className="absolute bottom-4 right-4 w-12 h-12 border-r-2 border-b-2 border-yellow-500/50 pointer-events-none" />
     </div>
   );
 }

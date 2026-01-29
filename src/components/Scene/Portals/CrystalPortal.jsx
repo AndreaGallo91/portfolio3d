@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import * as THREE from 'three';
@@ -8,9 +8,18 @@ export function CrystalPortal({ project, onClick }) {
   const groupRef = useRef();
   const veinsRef = useRef([]);
   const glowRef = useRef();
-  const { setHoveredObject, hoveredObject } = useStore();
+  const { setHoveredObject, hoveredObject, isLoading } = useStore();
+  const [showLabel, setShowLabel] = useState(false);
 
   const isHovered = hoveredObject?.id === project.id;
+
+  // Delay label appearance after loading
+  useEffect(() => {
+    if (!isLoading) {
+      const timer = setTimeout(() => setShowLabel(true), 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading]);
 
   // Generate crystal/stalactite positions
   const crystals = useMemo(() => {
@@ -155,25 +164,27 @@ export function CrystalPortal({ project, onClick }) {
       {/* Floating particles around crystals */}
       <CrystalParticles />
 
-      {/* Project title label */}
-      <Html
-        position={[0, 5, 0]}
-        center
-        style={{
-          opacity: isHovered ? 1 : 0.7,
-          transition: 'opacity 0.3s',
-          pointerEvents: 'none',
-        }}
-      >
-        <div
-          className="px-4 py-2 rounded-lg bg-black/80 border border-yellow-500/50 whitespace-nowrap"
-          style={{ fontFamily: 'Orbitron, sans-serif' }}
+      {/* Project title label - fades in after loading */}
+      {showLabel && (
+        <Html
+          position={[0, 5, 0]}
+          center
+          style={{
+            opacity: isHovered ? 1 : 0.7,
+            transition: 'opacity 0.5s ease-in',
+            pointerEvents: 'none',
+          }}
         >
-          <span className="text-yellow-500 font-semibold text-sm">
-            {project.title}
-          </span>
-        </div>
-      </Html>
+          <div
+            className="px-4 py-2 rounded-lg bg-black/80 border border-yellow-500/50 whitespace-nowrap animate-fade-in"
+            style={{ fontFamily: 'Orbitron, sans-serif' }}
+          >
+            <span className="text-yellow-500 font-semibold text-sm">
+              {project.title}
+            </span>
+          </div>
+        </Html>
+      )}
     </group>
   );
 }
