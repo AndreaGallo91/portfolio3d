@@ -185,7 +185,7 @@ export function ProjectRoom() {
         </div>
 
         {/* Right side - Project info */}
-        <div className="w-full md:w-96 flex flex-col">
+        <div className="w-full md:w-96 flex flex-col overflow-y-auto max-h-full pb-8">
           {/* Header with back button */}
           <div className="mb-6">
             <button
@@ -246,9 +246,6 @@ export function ProjectRoom() {
               ))}
             </div>
           </div>
-
-          {/* Spacer */}
-          <div className="flex-1" />
 
           {/* Action buttons */}
           <div className="flex flex-col gap-3">
