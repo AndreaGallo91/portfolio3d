@@ -3,11 +3,20 @@ import { useThree, useFrame } from '@react-three/fiber';
 import { PointerLockControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { useStore } from '../../store/useStore';
+import { projects } from '../../data/projects';
 
 export function FirstPersonControls() {
   const controlsRef = useRef();
   const { camera, gl } = useThree();
-  const { setControlsEnabled, controlsEnabled } = useStore();
+  const {
+    setControlsEnabled,
+    controlsEnabled,
+    setNearPortal,
+    nearPortal,
+    setIsEnteringPortal,
+    enterProjectRoom,
+    inProjectRoom
+  } = useStore();
 
   const [moveForward, setMoveForward] = useState(false);
   const [moveBackward, setMoveBackward] = useState(false);
@@ -17,8 +26,9 @@ export function FirstPersonControls() {
   const velocity = useRef(new THREE.Vector3());
   const direction = useRef(new THREE.Vector3());
 
-  const SPEED = 8;
-  const FRICTION = 10;
+  const SPEED = 2.5;
+  const FRICTION = 8;
+  const PORTAL_PROXIMITY_DISTANCE = 4; // Distance to show "PRESS E"
 
   // Set initial camera position
   useEffect(() => {
@@ -47,6 +57,16 @@ export function FirstPersonControls() {
         case 'KeyD':
         case 'ArrowRight':
           setMoveRight(true);
+          break;
+        case 'KeyE':
+          // Enter portal if near one
+          if (nearPortal) {
+            setIsEnteringPortal(true);
+            // Delay entering project room to show warp effect
+            setTimeout(() => {
+              enterProjectRoom(nearPortal);
+            }, 1500);
+          }
           break;
       }
     };
@@ -79,10 +99,11 @@ export function FirstPersonControls() {
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
     };
-  }, [controlsEnabled]);
+  }, [controlsEnabled, nearPortal, setIsEnteringPortal, enterProjectRoom]);
 
-  // Movement update
+  // Movement update + proximity detection
   useFrame((state, delta) => {
+    if (inProjectRoom) return;
     if (!controlsRef.current?.isLocked) return;
 
     // Apply friction
@@ -120,6 +141,26 @@ export function FirstPersonControls() {
       camera.position.x = Math.cos(angle) * maxDistance;
       camera.position.z = Math.sin(angle) * maxDistance;
     }
+
+    // Portal proximity detection
+    let closestPortal = null;
+    let closestDistance = Infinity;
+
+    projects.forEach((project) => {
+      const portalPos = new THREE.Vector3(
+        project.position[0],
+        1.7,
+        project.position[2]
+      );
+      const distance = camera.position.distanceTo(portalPos);
+
+      if (distance < PORTAL_PROXIMITY_DISTANCE && distance < closestDistance) {
+        closestDistance = distance;
+        closestPortal = project;
+      }
+    });
+
+    setNearPortal(closestPortal);
   });
 
   return (

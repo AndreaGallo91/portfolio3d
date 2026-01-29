@@ -6,11 +6,14 @@ import {
   LoadingScreen,
   ControlsHint,
   MobileFallback,
+  PortalPrompt,
+  WarpEffect,
+  ProjectRoom,
 } from './components/UI';
 import { useStore } from './store/useStore';
 
 function App() {
-  const { isMobile, setIsMobile } = useStore();
+  const { isMobile, setIsMobile, inProjectRoom } = useStore();
   const [useFallback, setUseFallback] = useState(false);
 
   useEffect(() => {
@@ -45,17 +48,26 @@ function App() {
       {/* Loading Screen */}
       <LoadingScreen />
 
-      {/* Header */}
-      <Header />
+      {/* Header - hide when in project room */}
+      {!inProjectRoom && <Header />}
 
       {/* 3D Experience */}
       <Experience />
 
-      {/* Project Info Panel */}
+      {/* Project Info Panel (legacy - keeping for click interactions) */}
       <ProjectPanel />
 
-      {/* Controls Hint */}
-      <ControlsHint />
+      {/* Portal Prompt - shows when near a portal */}
+      <PortalPrompt />
+
+      {/* Warp Effect - shows when entering portal */}
+      <WarpEffect />
+
+      {/* Project Room - fullscreen overlay when inside portal */}
+      <ProjectRoom />
+
+      {/* Controls Hint - hide when in project room */}
+      {!inProjectRoom && <ControlsHint />}
     </div>
   );
 }

@@ -21,35 +21,35 @@ export function SpaceSky() {
       <Nebula position={[100, 50, -150]} color="#FFD700" scale={30} />
       <Nebula position={[-80, 30, -120]} color="#ffffff" scale={20} />
 
-      {/* Planets in the background */}
+      {/* Planets in the background - brighter colors */}
       <Planet
-        position={[80, 40, -100]}
-        size={15}
-        color="#4a4a5a"
+        position={[60, 35, -80]}
+        size={18}
+        color="#6a6a8a"
         ringColor="#FFD700"
         hasRing
       />
       <Planet
-        position={[-60, 20, -80]}
-        size={8}
-        color="#8B4513"
+        position={[-50, 25, -60]}
+        size={10}
+        color="#c97b4a"
       />
       <Planet
-        position={[30, 60, -150]}
-        size={25}
-        color="#CD853F"
+        position={[25, 50, -100]}
+        size={28}
+        color="#e6a55f"
       />
       <Planet
-        position={[-100, 10, -120]}
-        size={5}
-        color="#2d2d3d"
+        position={[-80, 15, -90]}
+        size={7}
+        color="#5a5a7a"
       />
 
-      {/* Small moon nearby */}
+      {/* Small moon nearby - more visible */}
       <Planet
-        position={[40, 15, -40]}
-        size={3}
-        color="#3d3d3d"
+        position={[35, 12, -35]}
+        size={4}
+        color="#7a7a7a"
       />
     </group>
   );
@@ -102,7 +102,7 @@ function Nebula({ position, color, scale }) {
   );
 }
 
-// Planet component
+// Planet component - now with emissive for visibility in space
 function Planet({ position, size, color, hasRing = false, ringColor = '#FFD700' }) {
   const planetRef = useRef();
   const ringRef = useRef();
@@ -118,23 +118,36 @@ function Planet({ position, size, color, hasRing = false, ringColor = '#FFD700' 
 
   return (
     <group position={position}>
-      {/* Planet body */}
+      {/* Planet body - now visible with emissive */}
       <mesh ref={planetRef}>
         <sphereGeometry args={[size, 32, 32]} />
         <meshStandardMaterial
           color={color}
-          roughness={0.8}
+          emissive={color}
+          emissiveIntensity={0.3}
+          roughness={0.6}
           metalness={0.2}
         />
       </mesh>
 
-      {/* Planet atmosphere glow */}
-      <mesh scale={1.05}>
+      {/* Planet atmosphere glow - more visible */}
+      <mesh scale={1.15}>
         <sphereGeometry args={[size, 32, 32]} />
         <meshBasicMaterial
           color={color}
           transparent
-          opacity={0.1}
+          opacity={0.15}
+          side={THREE.BackSide}
+        />
+      </mesh>
+
+      {/* Outer glow */}
+      <mesh scale={1.3}>
+        <sphereGeometry args={[size, 16, 16]} />
+        <meshBasicMaterial
+          color={color}
+          transparent
+          opacity={0.05}
           side={THREE.BackSide}
         />
       </mesh>
@@ -146,7 +159,7 @@ function Planet({ position, size, color, hasRing = false, ringColor = '#FFD700' 
           <meshBasicMaterial
             color={ringColor}
             transparent
-            opacity={0.4}
+            opacity={0.6}
             side={THREE.DoubleSide}
           />
         </mesh>

@@ -13,13 +13,13 @@ export function Lights() {
 
   return (
     <>
-      {/* Ambient light - very low for space feel */}
-      <ambientLight intensity={0.08} color="#ffffff" />
+      {/* Ambient light - increased for better visibility */}
+      <ambientLight intensity={0.4} color="#ffffff" />
 
-      {/* Main sun light - distant star */}
+      {/* Main sun light - bright distant star */}
       <directionalLight
-        position={[50, 30, 20]}
-        intensity={0.6}
+        position={[50, 50, 30]}
+        intensity={1.5}
         color="#fffaf0"
         castShadow
         shadow-mapSize={[2048, 2048]}
@@ -32,48 +32,56 @@ export function Lights() {
 
       {/* Secondary fill light - from planet reflection */}
       <directionalLight
-        position={[-30, 10, -20]}
-        intensity={0.1}
+        position={[-30, 20, -20]}
+        intensity={0.5}
         color="#FFD700"
       />
 
       {/* Gold accent light for atmosphere */}
       <pointLight
-        position={[0, 15, 0]}
-        intensity={0.3}
+        position={[0, 20, 0]}
+        intensity={1.0}
         color="#FFD700"
-        distance={50}
+        distance={80}
       />
 
       {/* Moving atmospheric light */}
       <pointLight
         ref={movingLightRef}
-        position={[0, 8, 0]}
-        intensity={0.15}
+        position={[0, 10, 0]}
+        intensity={0.5}
         color="#FFD700"
-        distance={25}
+        distance={40}
       />
 
       {/* Rim lights for dramatic effect */}
       <pointLight
-        position={[-20, 5, -20]}
-        intensity={0.1}
+        position={[-25, 8, -25]}
+        intensity={0.4}
         color="#ffffff"
-        distance={30}
+        distance={50}
       />
 
       <pointLight
-        position={[20, 5, -20]}
-        intensity={0.1}
+        position={[25, 8, -25]}
+        intensity={0.4}
         color="#FFD700"
-        distance={30}
+        distance={50}
+      />
+
+      {/* Extra front light so portals are visible */}
+      <pointLight
+        position={[0, 5, 10]}
+        intensity={0.6}
+        color="#ffffff"
+        distance={60}
       />
 
       {/* Hemisphere light for natural look */}
       <hemisphereLight
         color="#ffffff"
-        groundColor="#1a1a1a"
-        intensity={0.15}
+        groundColor="#2a2a2a"
+        intensity={0.5}
       />
     </>
   );

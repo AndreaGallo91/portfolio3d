@@ -22,12 +22,12 @@ export function MoonTerrain() {
 
   return (
     <group>
-      {/* Main moon surface - large flat area with slight curve */}
+      {/* Main moon surface - brighter gray for visibility */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <circleGeometry args={[60, 64]} />
         <meshStandardMaterial
-          color="#1a1a1a"
-          roughness={0.9}
+          color="#4a4a4a"
+          roughness={0.85}
           metalness={0.1}
         />
       </mesh>
@@ -38,7 +38,7 @@ export function MoonTerrain() {
           {/* Crater rim */}
           <mesh position={[0, 0.1 * crater.scale, 0]} receiveShadow castShadow>
             <torusGeometry args={[crater.scale, 0.2 * crater.scale, 8, 16]} />
-            <meshStandardMaterial color="#2d2d2d" roughness={0.95} />
+            <meshStandardMaterial color="#5a5a5a" roughness={0.9} />
           </mesh>
         </group>
       ))}
@@ -88,8 +88,8 @@ function Rocks() {
         >
           <dodecahedronGeometry args={[1, 0]} />
           <meshStandardMaterial
-            color={i % 2 === 0 ? '#2d2d2d' : '#1f1f1f'}
-            roughness={0.95}
+            color={i % 2 === 0 ? '#5a5a5a' : '#4a4a4a'}
+            roughness={0.9}
             metalness={0.05}
           />
         </mesh>

@@ -28,4 +28,27 @@ export const useStore = create((set) => ({
   // Show welcome message
   showWelcome: true,
   setShowWelcome: (show) => set({ showWelcome: show }),
+
+  // Portal proximity state
+  nearPortal: null,
+  setNearPortal: (portal) => set({ nearPortal: portal }),
+
+  // Portal entry animation state
+  isEnteringPortal: false,
+  setIsEnteringPortal: (entering) => set({ isEnteringPortal: entering }),
+
+  // Project room state (when inside portal)
+  inProjectRoom: false,
+  currentProjectRoom: null,
+  enterProjectRoom: (project) => set({
+    inProjectRoom: true,
+    currentProjectRoom: project,
+    isEnteringPortal: false,
+    controlsEnabled: false
+  }),
+  exitProjectRoom: () => set({
+    inProjectRoom: false,
+    currentProjectRoom: null,
+    controlsEnabled: true
+  }),
 }));

@@ -9,6 +9,11 @@ export const projects = [
     demo: "https://quiz-game-demo.vercel.app",
     position: [-8, 0, -5],
     portalType: "stargate",
+    screenshots: [
+      "/projects/quiz-game/screen1.png",
+      "/projects/quiz-game/screen2.png",
+      "/projects/quiz-game/screen3.png"
+    ]
   },
   {
     id: 2,
@@ -20,6 +25,7 @@ export const projects = [
     demo: null,
     position: [0, 0, -12],
     portalType: "rift",
+    screenshots: []
   },
   {
     id: 3,
@@ -31,6 +37,7 @@ export const projects = [
     demo: "https://project-3-demo.vercel.app",
     position: [8, 0, -5],
     portalType: "monolith",
+    screenshots: []
   }
 ];
 
