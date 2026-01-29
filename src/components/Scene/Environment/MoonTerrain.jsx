@@ -1,28 +1,12 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { Float } from '@react-three/drei';
 import * as THREE from 'three';
 
 export function MoonTerrain() {
-  const meshRef = useRef();
-
-  // Create crater positions
-  const craters = useMemo(() => {
-    const positions = [];
-    for (let i = 0; i < 20; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const radius = 5 + Math.random() * 25;
-      positions.push({
-        x: Math.cos(angle) * radius,
-        z: Math.sin(angle) * radius,
-        scale: 0.5 + Math.random() * 2,
-      });
-    }
-    return positions;
-  }, []);
-
   return (
     <group>
-      {/* Main moon surface - brighter gray for visibility */}
+      {/* Main moon surface */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <circleGeometry args={[60, 64]} />
         <meshStandardMaterial
@@ -32,37 +16,31 @@ export function MoonTerrain() {
         />
       </mesh>
 
-      {/* Terrain bumps and rocks */}
-      {craters.map((crater, i) => (
-        <group key={i} position={[crater.x, 0, crater.z]}>
-          {/* Crater rim */}
-          <mesh position={[0, 0.1 * crater.scale, 0]} receiveShadow castShadow>
-            <torusGeometry args={[crater.scale, 0.2 * crater.scale, 8, 16]} />
-            <meshStandardMaterial color="#5a5a5a" roughness={0.9} />
-          </mesh>
-        </group>
-      ))}
+      {/* Ground rocks */}
+      <GroundRocks />
 
-      {/* Scattered rocks */}
-      <Rocks />
+      {/* Floating rocks */}
+      <FloatingRocks />
 
-      {/* Dust particles on ground */}
+      {/* Dust particles */}
       <GroundDust />
     </group>
   );
 }
 
-// Scattered rocks on the surface
-function Rocks() {
+// Ground rocks - many scattered rocks on the surface
+function GroundRocks() {
   const rocks = useMemo(() => {
     const items = [];
-    for (let i = 0; i < 50; i++) {
+    // More rocks - 120 total
+    for (let i = 0; i < 120; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const radius = 3 + Math.random() * 40;
+      const radius = 2 + Math.random() * 45;
+      const scale = 0.1 + Math.random() * 0.8;
       items.push({
         position: [
           Math.cos(angle) * radius,
-          Math.random() * 0.3,
+          scale * 0.3, // Half buried in ground
           Math.sin(angle) * radius,
         ],
         rotation: [
@@ -70,7 +48,8 @@ function Rocks() {
           Math.random() * Math.PI,
           Math.random() * Math.PI,
         ],
-        scale: 0.1 + Math.random() * 0.5,
+        scale,
+        type: Math.floor(Math.random() * 3), // Different rock shapes
       });
     }
     return items;
@@ -86,13 +65,70 @@ function Rocks() {
           scale={rock.scale}
           castShadow
         >
-          <dodecahedronGeometry args={[1, 0]} />
+          {rock.type === 0 && <dodecahedronGeometry args={[1, 0]} />}
+          {rock.type === 1 && <icosahedronGeometry args={[1, 0]} />}
+          {rock.type === 2 && <octahedronGeometry args={[1, 0]} />}
           <meshStandardMaterial
-            color={i % 2 === 0 ? '#5a5a5a' : '#4a4a4a'}
+            color={i % 3 === 0 ? '#5a5a5a' : i % 3 === 1 ? '#4a4a4a' : '#3d3d3d'}
             roughness={0.9}
             metalness={0.05}
           />
         </mesh>
+      ))}
+    </group>
+  );
+}
+
+// Floating rocks in the air
+function FloatingRocks() {
+  const floatingRocks = useMemo(() => {
+    const items = [];
+    // 25 floating rocks at various heights
+    for (let i = 0; i < 25; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 5 + Math.random() * 35;
+      items.push({
+        position: [
+          Math.cos(angle) * radius,
+          2 + Math.random() * 8, // Float between 2-10 units high
+          Math.sin(angle) * radius,
+        ],
+        rotation: [
+          Math.random() * Math.PI,
+          Math.random() * Math.PI,
+          Math.random() * Math.PI,
+        ],
+        scale: 0.3 + Math.random() * 1.2,
+        floatSpeed: 0.5 + Math.random() * 1.5,
+        floatIntensity: 0.3 + Math.random() * 0.5,
+      });
+    }
+    return items;
+  }, []);
+
+  return (
+    <group>
+      {floatingRocks.map((rock, i) => (
+        <Float
+          key={i}
+          speed={rock.floatSpeed}
+          rotationIntensity={0.3}
+          floatIntensity={rock.floatIntensity}
+        >
+          <mesh
+            position={rock.position}
+            rotation={rock.rotation}
+            scale={rock.scale}
+            castShadow
+          >
+            <dodecahedronGeometry args={[1, 0]} />
+            <meshStandardMaterial
+              color="#5a5a5a"
+              roughness={0.8}
+              metalness={0.1}
+            />
+          </mesh>
+        </Float>
       ))}
     </group>
   );

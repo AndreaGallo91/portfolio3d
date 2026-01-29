@@ -7,7 +7,7 @@ import { projects } from '../../data/projects';
 import { MoonTerrain, SpaceSky } from './Environment';
 
 // Portals
-import { StargatePortal, RiftPortal, MonolithPortal } from './Portals';
+import { StargatePortal, RiftPortal, MonolithPortal, CrystalPortal } from './Portals';
 
 // Props
 import { Rover, Flag, Antenna, FloatingRocks } from './Props';
@@ -53,9 +53,17 @@ function Scene() {
             position={project.position}
           />
         );
+      case 'crystal':
+        return (
+          <CrystalPortal
+            key={project.id}
+            project={project}
+            position={project.position}
+          />
+        );
       default:
         return (
-          <StargatePortal
+          <CrystalPortal
             key={project.id}
             project={project}
             position={project.position}

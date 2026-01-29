@@ -36,6 +36,13 @@ export function FirstPersonControls() {
     camera.lookAt(0, 1.7, 0);
   }, [camera]);
 
+  // Unlock pointer when entering project room
+  useEffect(() => {
+    if (inProjectRoom && controlsRef.current?.isLocked) {
+      controlsRef.current.unlock();
+    }
+  }, [inProjectRoom]);
+
   // Keyboard controls
   useEffect(() => {
     const handleKeyDown = (event) => {

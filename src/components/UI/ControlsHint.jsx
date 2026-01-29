@@ -4,15 +4,26 @@ import { useStore } from '../../store/useStore';
 export function ControlsHint() {
   const { isMobile, showWelcome, setShowWelcome, isLoading } = useStore();
   const [isVisible, setIsVisible] = useState(true);
+  const [showAfterDelay, setShowAfterDelay] = useState(false);
+
+  // Delay showing after loading completes (wait for loading screen fade)
+  useEffect(() => {
+    if (!isLoading) {
+      const timer = setTimeout(() => {
+        setShowAfterDelay(true);
+      }, 1000); // Wait 1 second after loading ends
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading]);
 
   useEffect(() => {
-    if (!isLoading && showWelcome) {
+    if (!isLoading && showWelcome && showAfterDelay) {
       const timer = setTimeout(() => {
         setShowWelcome(false);
       }, 10000);
       return () => clearTimeout(timer);
     }
-  }, [isLoading, showWelcome, setShowWelcome]);
+  }, [isLoading, showWelcome, setShowWelcome, showAfterDelay]);
 
   // Hide after user starts moving
   useEffect(() => {
@@ -26,7 +37,7 @@ export function ControlsHint() {
     return () => window.removeEventListener('keydown', handleKey);
   }, []);
 
-  if (isLoading || !showWelcome || !isVisible) return null;
+  if (isLoading || !showWelcome || !isVisible || !showAfterDelay) return null;
 
   return (
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-fade-in">

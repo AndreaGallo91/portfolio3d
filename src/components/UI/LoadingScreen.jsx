@@ -1,12 +1,31 @@
+import { useState, useEffect } from 'react';
 import { useStore } from '../../store/useStore';
 
 export function LoadingScreen() {
   const { isLoading } = useStore();
+  const [isVisible, setIsVisible] = useState(true);
+  const [isFading, setIsFading] = useState(false);
 
-  if (!isLoading) return null;
+  useEffect(() => {
+    if (!isLoading) {
+      // Start fade out animation
+      setIsFading(true);
+      // Remove from DOM after fade completes
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading]);
+
+  if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center">
+    <div
+      className={`fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center transition-opacity duration-700 ${
+        isFading ? 'opacity-0' : 'opacity-100'
+      }`}
+    >
       {/* Animated Logo */}
       <div className="relative mb-8">
         {/* Outer ring */}

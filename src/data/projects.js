@@ -6,9 +6,9 @@ export const projects = [
     techStack: ["React", "Tailwind CSS", "Gamification", "LocalStorage"],
     color: "#FFD700", // gold
     github: "https://github.com/yourusername/quiz-game",
-    demo: "https://quiz-game-demo.vercel.app",
+    demo: "https://quiz-game-umber-nine.vercel.app",
     position: [-8, 0, -5],
-    portalType: "stargate",
+    portalType: "crystal",
     screenshots: [
       "/projects/quiz-game/screen1.png",
       "/projects/quiz-game/screen2.png",
@@ -24,7 +24,7 @@ export const projects = [
     github: "https://github.com/yourusername/project-2",
     demo: null,
     position: [0, 0, -12],
-    portalType: "rift",
+    portalType: "crystal",
     screenshots: []
   },
   {
@@ -36,7 +36,7 @@ export const projects = [
     github: "https://github.com/yourusername/project-3",
     demo: "https://project-3-demo.vercel.app",
     position: [8, 0, -5],
-    portalType: "monolith",
+    portalType: "crystal",
     screenshots: []
   }
 ];
