@@ -37,6 +37,10 @@ export function ProjectRoom() {
   // Navigate to another project
   const goToProject = (project) => {
     setCurrentSlide(0);
+    // Ensure pointer lock is released when switching projects
+    if (document.pointerLockElement) {
+      document.exitPointerLock();
+    }
     enterProjectRoom(project);
   };
 
