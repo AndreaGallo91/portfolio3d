@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useStore } from '../../store/useStore';
 import { projects } from '../../data/projects';
 
@@ -9,6 +9,30 @@ export function ProjectRoom() {
 
   // Get other projects for navigation
   const otherProjects = projects.filter(p => p.id !== currentProjectRoom?.id);
+
+  // Force release pointer lock whenever we're in project room
+  useEffect(() => {
+    if (inProjectRoom) {
+      // Release pointer lock immediately and repeatedly to ensure it's released
+      const releasePointer = () => {
+        if (document.pointerLockElement) {
+          document.exitPointerLock();
+        }
+      };
+
+      releasePointer();
+      // Also release after a small delay in case it gets re-acquired
+      const timer1 = setTimeout(releasePointer, 100);
+      const timer2 = setTimeout(releasePointer, 300);
+      const timer3 = setTimeout(releasePointer, 500);
+
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+        clearTimeout(timer3);
+      };
+    }
+  }, [inProjectRoom, currentProjectRoom]);
 
   // Fade in effect
   useEffect(() => {
@@ -35,14 +59,22 @@ export function ProjectRoom() {
   }, [inProjectRoom, currentProjectRoom]);
 
   // Navigate to another project
-  const goToProject = (project) => {
-    setCurrentSlide(0);
-    // Ensure pointer lock is released when switching projects
+  const goToProject = useCallback((project) => {
+    // Force release pointer lock multiple times
     if (document.pointerLockElement) {
       document.exitPointerLock();
     }
+
+    setCurrentSlide(0);
     enterProjectRoom(project);
-  };
+
+    // Release again after state update
+    setTimeout(() => {
+      if (document.pointerLockElement) {
+        document.exitPointerLock();
+      }
+    }, 50);
+  }, [enterProjectRoom]);
 
   if (!inProjectRoom || !currentProjectRoom) return null;
 

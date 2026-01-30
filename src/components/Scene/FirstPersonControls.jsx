@@ -38,8 +38,15 @@ export function FirstPersonControls() {
 
   // Unlock pointer when entering project room
   useEffect(() => {
-    if (inProjectRoom && controlsRef.current?.isLocked) {
-      controlsRef.current.unlock();
+    if (inProjectRoom) {
+      // Force unlock
+      if (controlsRef.current?.isLocked) {
+        controlsRef.current.unlock();
+      }
+      // Also use document API
+      if (document.pointerLockElement) {
+        document.exitPointerLock();
+      }
     }
   }, [inProjectRoom]);
 
@@ -169,6 +176,11 @@ export function FirstPersonControls() {
 
     setNearPortal(closestPortal);
   });
+
+  // Don't render PointerLockControls when in project room
+  if (inProjectRoom) {
+    return null;
+  }
 
   return (
     <PointerLockControls
