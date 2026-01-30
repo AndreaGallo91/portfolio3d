@@ -57,7 +57,7 @@ export const spaceInfo = {
   author: "Andrea Gallo",
   socials: {
     github: "https://github.com/AndreaGallo91",
-    linkedin: "https://linkedin.com/in/yourprofile",
-    email: "andrea@example.com"
+    linkedin: "https://www.linkedin.com/in/gallucci-andrea/",
+    email: "andrea.gallucci1991@gmail.com"
   }
 };

@@ -108,7 +108,7 @@ function Nebula({ position, color, scale }) {
   );
 }
 
-// Planet component - now with emissive for visibility in space
+// Planet component - always visible from all angles using meshBasicMaterial
 function Planet({ position, size, color, hasRing = false, ringColor = '#FFD700' }) {
   const planetRef = useRef();
   const ringRef = useRef();
@@ -124,25 +124,19 @@ function Planet({ position, size, color, hasRing = false, ringColor = '#FFD700' 
 
   return (
     <group position={position}>
-      {/* Planet body - now visible with emissive */}
+      {/* Planet body - using meshBasicMaterial for consistent visibility */}
       <mesh ref={planetRef}>
         <sphereGeometry args={[size, 32, 32]} />
-        <meshStandardMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={0.3}
-          roughness={0.6}
-          metalness={0.2}
-        />
+        <meshBasicMaterial color={color} />
       </mesh>
 
-      {/* Planet atmosphere glow - more visible */}
+      {/* Planet atmosphere glow */}
       <mesh scale={1.15}>
         <sphereGeometry args={[size, 32, 32]} />
         <meshBasicMaterial
           color={color}
           transparent
-          opacity={0.15}
+          opacity={0.2}
           side={THREE.BackSide}
         />
       </mesh>
@@ -153,7 +147,7 @@ function Planet({ position, size, color, hasRing = false, ringColor = '#FFD700' 
         <meshBasicMaterial
           color={color}
           transparent
-          opacity={0.05}
+          opacity={0.08}
           side={THREE.BackSide}
         />
       </mesh>
