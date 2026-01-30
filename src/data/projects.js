@@ -5,7 +5,7 @@ export const projects = [
     description: "Un gioco quiz interattivo con sistema di gamification, progressione dei livelli, badge e classifiche. Perfetto per l'apprendimento coinvolgente.",
     techStack: ["React", "Tailwind CSS", "Gamification", "LocalStorage"],
     color: "#FFD700", // gold
-    github: "https://github.com/yourusername/quiz-game",
+    github: "https://github.com/AndreaGallo91/quiz-game",
     demo: "https://quiz-game-umber-nine.vercel.app",
     position: [-8, 0, -5],
     portalType: "crystal",
@@ -17,27 +17,35 @@ export const projects = [
   },
   {
     id: 2,
-    title: "Progetto 2",
-    description: "Descrizione del secondo progetto. Aggiungi qui i dettagli del tuo progetto, le funzionalita principali e cosa lo rende speciale.",
-    techStack: ["Next.js", "TypeScript", "Prisma", "PostgreSQL"],
+    title: "Data Glance",
+    description: "Dashboard interattiva per la visualizzazione e analisi dei dati. Interfaccia moderna con grafici dinamici e filtri avanzati per esplorare dataset complessi.",
+    techStack: ["React", "Chart.js", "Tailwind CSS", "Data Visualization"],
     color: "#FFD700", // gold
-    github: "https://github.com/yourusername/project-2",
-    demo: null,
+    github: "https://github.com/AndreaGallo91/data-glance",
+    demo: "https://data-glance-indol.vercel.app/",
     position: [0, 0, -12],
     portalType: "crystal",
-    screenshots: []
+    screenshots: [
+      "/projects/data-glance/screen1.png",
+      "/projects/data-glance/screen2.png",
+      "/projects/data-glance/screen3.png"
+    ]
   },
   {
     id: 3,
-    title: "Progetto 3",
-    description: "Descrizione del terzo progetto. Questo spazio e pronto per mostrare un altro dei tuoi lavori incredibili.",
-    techStack: ["React Native", "Expo", "Firebase", "Redux"],
+    title: "Procedural Facade Generator",
+    description: "Generatore procedurale di facciate architettoniche. Crea design unici e personalizzabili attraverso algoritmi procedurali e parametri configurabili.",
+    techStack: ["Three.js", "React", "Procedural Generation", "WebGL"],
     color: "#FFD700", // gold
-    github: "https://github.com/yourusername/project-3",
-    demo: "https://project-3-demo.vercel.app",
+    github: "https://github.com/AndreaGallo91/procedural-facade-generator",
+    demo: "https://procedural-facade-generator.vercel.app/",
     position: [8, 0, -5],
     portalType: "crystal",
-    screenshots: []
+    screenshots: [
+      "/projects/procedural-facade-generator/screen1.png",
+      "/projects/procedural-facade-generator/screen2.png",
+      "/projects/procedural-facade-generator/screen3.png"
+    ]
   }
 ];
 

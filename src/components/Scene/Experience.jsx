@@ -102,7 +102,7 @@ function Scene() {
 }
 
 export function Experience() {
-  const { setIsMobile, isMobile } = useStore();
+  const { setIsMobile, isMobile, inProjectRoom } = useStore();
   const [showInstructions, setShowInstructions] = useState(true);
 
   useEffect(() => {
@@ -119,7 +119,11 @@ export function Experience() {
   };
 
   return (
-    <div className="canvas-container" onClick={handleCanvasClick}>
+    <div
+      className="canvas-container"
+      onClick={handleCanvasClick}
+      style={{ pointerEvents: inProjectRoom ? 'none' : 'auto' }}
+    >
       {/* Instructions overlay */}
       {showInstructions && !isMobile && (
         <div className="fixed inset-0 z-40 flex items-center justify-center pointer-events-none">
