@@ -8,7 +8,7 @@ export function CrystalPortal({ project, onClick }) {
   const groupRef = useRef();
   const veinsRef = useRef([]);
   const glowRef = useRef();
-  const { setHoveredObject, hoveredObject, isLoading } = useStore();
+  const { setHoveredObject, hoveredObject, isLoading, inProjectRoom } = useStore();
   const [showLabel, setShowLabel] = useState(false);
 
   const isHovered = hoveredObject?.id === project.id;
@@ -164,8 +164,8 @@ export function CrystalPortal({ project, onClick }) {
       {/* Floating particles around crystals */}
       <CrystalParticles />
 
-      {/* Project title label - fades in after loading */}
-      {showLabel && (
+      {/* Project title label - fades in after loading, hidden when in project room */}
+      {showLabel && !inProjectRoom && (
         <Html
           position={[0, 5, 0]}
           center
