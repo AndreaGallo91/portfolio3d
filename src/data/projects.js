@@ -27,8 +27,7 @@ export const projects = [
     portalType: "crystal",
     screenshots: [
       "/projects/data-glance/screen1.png",
-      "/projects/data-glance/screen2.png",
-      "/projects/data-glance/screen3.png"
+      "/projects/data-glance/screen2.png"
     ]
   },
   {
