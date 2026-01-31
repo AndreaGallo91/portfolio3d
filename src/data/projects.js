@@ -10,9 +10,9 @@ export const projects = [
     position: [-8, 0, -5],
     portalType: "crystal",
     screenshots: [
-      "/projects/quiz-game/screen1.png",
-      "/projects/quiz-game/screen2.png",
-      "/projects/quiz-game/screen3.png"
+      "/projects/quiz-game/screen1.PNG",
+      "/projects/quiz-game/screen2.PNG",
+      "/projects/quiz-game/screen3.PNG"
     ]
   },
   {
@@ -26,8 +26,8 @@ export const projects = [
     position: [0, 0, -12],
     portalType: "crystal",
     screenshots: [
-      "/projects/data-glance/screen1.png",
-      "/projects/data-glance/screen2.png"
+      "/projects/data-glance/screen1.PNG",
+      "/projects/data-glance/screen2.PNG"
     ]
   },
   {
@@ -41,9 +41,9 @@ export const projects = [
     position: [8, 0, -5],
     portalType: "crystal",
     screenshots: [
-      "/projects/procedural-facade-generator/screen1.png",
-      "/projects/procedural-facade-generator/screen2.png",
-      "/projects/procedural-facade-generator/screen3.png"
+      "/projects/procedural-facade-generator/screen1.PNG",
+      "/projects/procedural-facade-generator/screen2.PNG",
+      "/projects/procedural-facade-generator/screen3.PNG"
     ]
   }
 ];
