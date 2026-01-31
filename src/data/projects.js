@@ -10,9 +10,9 @@ export const projects = [
     position: [-8, 0, -5],
     portalType: "crystal",
     screenshots: [
-      "/projects/quiz-game/screen1.PNG",
-      "/projects/quiz-game/screen2.PNG",
-      "/projects/quiz-game/screen3.PNG"
+      "/projects/quiz-game/screen1.png",
+      "/projects/quiz-game/screen2.png",
+      "/projects/quiz-game/screen3.png"
     ]
   },
   {
