@@ -45,6 +45,21 @@ export const projects = [
       "/projects/procedural-facade-generator/screen2.PNG",
       "/projects/procedural-facade-generator/screen3.PNG"
     ]
+  },
+  {
+    id: 4,
+    title: "Freelance Manager",
+    description: "Applicazione per la gestione di progetti freelance. Traccia clienti, progetti, fatture e scadenze in un'unica dashboard intuitiva e completa.",
+    techStack: ["React", "Node.js", "MongoDB", "Tailwind CSS"],
+    color: "#FFD700", // gold
+    github: "https://github.com/AndreaGallo91/freelance-manager",
+    demo: "https://freelance-manager.vercel.app/",
+    position: [-8, 0, -12],
+    portalType: "crystal",
+    screenshots: [
+      "/projects/freelance-manager/screen1.PNG",
+      "/projects/freelance-manager/screen2.PNG"
+    ]
   }
 ];
 
