@@ -49,11 +49,11 @@ export const projects = [
   {
     id: 4,
     title: "Freelance Manager",
-    description: "Applicazione per la gestione di progetti freelance. Traccia clienti, progetti, fatture e scadenze in un'unica dashboard intuitiva e completa.",
+    description: "App personale full-stack per gestire la mia attività freelance. Gestione clienti, progetti, preventivi, fatture, scadenze e reportistica. In produzione e uso quotidiano con database reale.",
     techStack: ["React", "Node.js", "MongoDB", "Tailwind CSS"],
     color: "#FFD700", // gold
-    github: "https://github.com/AndreaGallo91/freelance-manager",
-    demo: "https://freelance-manager.vercel.app/",
+    github: null,
+    demo: null,
     position: [-8, 0, -12],
     portalType: "crystal",
     screenshots: [
