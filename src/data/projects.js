@@ -33,10 +33,10 @@ export const projects = [
   {
     id: 3,
     title: "Procedural Facade Generator",
-    description: "Generatore procedurale di facciate architettoniche. Crea design unici e personalizzabili attraverso algoritmi procedurali e parametri configurabili.",
+    description: "Generatore procedurale di facciate architettoniche. Crea design unici e personalizzabili attraverso algoritmi procedurali e parametri configurabili. Repository privata.",
     techStack: ["Three.js", "React", "Procedural Generation", "WebGL"],
     color: "#FFD700", // gold
-    github: "https://github.com/AndreaGallo91/procedural-facade-generator",
+    github: null,
     demo: "https://procedural-facade-generator.vercel.app/",
     position: [8, 0, -5],
     portalType: "crystal",
